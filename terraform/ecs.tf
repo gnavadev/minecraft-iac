@@ -27,9 +27,9 @@ resource "aws_ecs_task_definition" "minecraft" {
       essential = true
 
       environment = [
-        { name = "EULA", value = "TRUE" },   # replaces the manual eula.txt edit
+        { name = "EULA", value = "TRUE" },
         { name = "TYPE", value = "VANILLA" },
-        { name = "MEMORY", value = "2G" }    # JVM heap; leaves headroom in the 3 GiB task
+        { name = "MEMORY", value = "2G" }
       ]
 
       portMappings = [
@@ -43,7 +43,7 @@ resource "aws_ecs_task_definition" "minecraft" {
       mountPoints = [
         {
           sourceVolume  = "minecraft-data"
-          containerPath = "/data" # itzg image stores world + configs here
+          containerPath = "/data"
           readOnly      = false
         }
       ]
@@ -80,11 +80,9 @@ resource "aws_ecs_service" "minecraft" {
   name            = "${var.project_name}-service"
   cluster         = aws_ecs_cluster.minecraft.id
   task_definition = aws_ecs_task_definition.minecraft.arn
-  desired_count   = 1 # ECS auto-restarts the server if it dies
+  desired_count   = 1
   launch_type     = "FARGATE"
 
-  # Critical with a shared EFS world: never run two servers at once.
-  # The old task must stop (and save) before the new one starts.
   deployment_minimum_healthy_percent = 0
   deployment_maximum_percent         = 100
 
