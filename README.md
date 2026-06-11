@@ -1,4 +1,4 @@
-\\# Course Project Part 2 
+# Course Project Part 2 
 
 Automated deployment of a Minecraft server on AWS using Terraform, ECS Fargate, EFS, and GitHub Actions. No AWS Management Console required.
 
